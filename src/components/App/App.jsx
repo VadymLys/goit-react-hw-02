@@ -1,30 +1,62 @@
-import React from "react";
-import Profile from "../Profile/Profile"
-import userData from "../Profile/userData.json"
-import FriendList from "../FriendList/FriendList";
-import friends from "../FriendList/friends.json";
-import TransactionHistory from "../TransactionHistory/TransactionHistory";
-import transactions from "../TransactionHistory/transactions.json";
+import React, { useState, useEffect } from "react";
+import "../Feedback/Feedback";
+import "../Options/Options";
+import "../Description/Description";
+import Options from "../Options/Options";
+import Feedback from "../Feedback/Feedback";
+import Description from "../Description/Description";
 
-const user = JSON.parse(JSON.stringify(userData));
-const friend = JSON.parse(JSON.stringify(friends));
-const transaction = JSON.parse(JSON.stringify(transactions))
+const App = () => {
+  const [feedback, setFeedback] = useState({ good: 0, neutral: 0, bad: 0 });
 
-function App() {
-  return (
-    <>
-      <Profile
-        name={user.username}
-        tag={user.tag}
-        location={user.location}
-        image={user.avatar}
-        stats={user.stats}
-      />
+  useEffect(() => {
+    const storedFeedback = window.localStorage.getItem("feedback");
+    if (storedFeedback) {
+      setFeedback(JSON.parse(storedFeedback));
+    }
+  }, []);
 
-      <FriendList friends={friend} />
-      <TransactionHistory items={transaction} />
-    </>
+  useEffect(() => {
+    window.localStorage.setItem("feedback", JSON.stringify(feedback));
+  }, [feedback]);
+
+  const changeFeedback = (type) => {
+    setFeedback((prevFeedback) => ({
+      ...prevFeedback,
+      [type]: prevFeedback[type] + 1,
+    }));
+  };
+
+  const handleReset = () => {
+    setFeedback({ good: 0, neutral: 0, bad: 0 });
+  };
+
+  const totalFeedback = feedback.good + feedback.neutral + feedback.bad;
+
+  const positivePercentage = Math.round(
+    ((feedback.good + feedback.neutral) / totalFeedback) * 100
   );
-}
 
+  return (
+    <div className="container">
+      <Description />
+      <Options
+        onReset={handleReset}
+        changeFeedback={changeFeedback}
+        hasFeedback={totalFeedback > 0}
+      />
+      {totalFeedback > 0 ? (
+        <Feedback
+          good={feedback.good}
+          neutral={feedback.neutral}
+          bad={feedback.bad}
+          totalFeedback={totalFeedback}
+          positivePercentage={positivePercentage}
+        />
+      ) : (
+        <p>No feedback yet</p>
+      )}
+    </div>
+  );
+};
 export default App;
