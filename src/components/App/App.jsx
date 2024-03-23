@@ -21,6 +21,7 @@ const App = () => {
   }, [feedback]);
 
   const changeFeedback = (type) => {
+    console.log(type);
     setFeedback((prevFeedback) => ({
       ...prevFeedback,
       [type]: prevFeedback[type] + 1,
@@ -36,7 +37,7 @@ const App = () => {
   const positivePercentage = Math.round(
     ((feedback.good + feedback.neutral) / totalFeedback) * 100
   );
-
+  console.log(feedback);
   return (
     <div className="container">
       <Description />
