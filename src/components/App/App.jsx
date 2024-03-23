@@ -5,6 +5,7 @@ import "../Description/Description";
 import Options from "../Options/Options";
 import Feedback from "../Feedback/Feedback";
 import Description from "../Description/Description";
+import css from "../App/App.module.css";
 
 const App = () => {
   const [feedback, setFeedback] = useState({ good: 0, neutral: 0, bad: 0 });
@@ -21,7 +22,6 @@ const App = () => {
   }, [feedback]);
 
   const changeFeedback = (type) => {
-    console.log(type);
     setFeedback((prevFeedback) => ({
       ...prevFeedback,
       [type]: prevFeedback[type] + 1,
@@ -37,9 +37,9 @@ const App = () => {
   const positivePercentage = Math.round(
     ((feedback.good + feedback.neutral) / totalFeedback) * 100
   );
-  console.log(feedback);
+
   return (
-    <div className="container">
+    <div className={css.container}>
       <Description />
       <Options
         onReset={handleReset}

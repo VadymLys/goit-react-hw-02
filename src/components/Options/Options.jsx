@@ -3,8 +3,9 @@ import clsx from "clsx";
 
 const Options = ({ onReset, hasFeedback, changeFeedback }) => {
   return (
-    <div>
+    <div className={css.buttons}>
       <button
+        className={css.btn}
         onClick={() => {
           changeFeedback("good");
         }}
@@ -12,6 +13,7 @@ const Options = ({ onReset, hasFeedback, changeFeedback }) => {
         Good
       </button>
       <button
+        className={css.btn}
         onClick={() => {
           changeFeedback("neutral");
         }}
@@ -19,13 +21,18 @@ const Options = ({ onReset, hasFeedback, changeFeedback }) => {
         Neutral
       </button>
       <button
+        className={css.btn}
         onClick={() => {
           changeFeedback("bad");
         }}
       >
         Bad
       </button>
-      {hasFeedback > 0 && <button onClick={onReset}>Reset</button>}
+      {hasFeedback > 0 && (
+        <button className={css.btn} onClick={onReset}>
+          Reset
+        </button>
+      )}
     </div>
   );
 };
